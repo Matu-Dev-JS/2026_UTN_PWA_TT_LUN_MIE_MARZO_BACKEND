@@ -1,6 +1,6 @@
 ## Crear espacio de trabajo
 
-## Backend
+## Backend (15/20 min)
 Requiere de token de autentificacion
 
 POST /api/workspace
@@ -21,7 +21,7 @@ response 200 OK: {
     status: 200
 }
 
-## Frontend
+## Frontend (15/20 min)
 Crear una screen en /workspace/new que tenga un formulario con titulo y descripcion manejado con useForm.
 Proteger la screen con el AuthMiddleware
 Desarrollar la funcion de fetching para interactuar con /api/workspace
