@@ -15,15 +15,17 @@ body: {
     description (opcional)
 }
 
-response 200 OK: {
+response 201 OK: {
     ok: true,
     message: 'Espacio de trabajo creado exitosamente',
-    status: 200
+    status: 201
 }
 
-## Frontend (15/20 min)
+## Frontend (20/25 min)
+
 Crear una screen en /workspace/new que tenga un formulario con titulo y descripcion manejado con useForm.
 Proteger la screen con el AuthMiddleware
+Crear un boton en /home para crear espacio de trabajo
 Desarrollar la funcion de fetching para interactuar con /api/workspace
 Conectar el formulario al endpoint /api/workspace con la funcion creada
 Redireccionar a /home cuando se cree en espacio de trabajo
