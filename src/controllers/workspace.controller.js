@@ -1,5 +1,6 @@
 import ServerError from "../helpers/error.helper.js"
 import workspaceMemberRepository from "../repository/member.repository.js"
+import workspaceService from "../services/workspace.service.js"
 
 class WorkspaceController {
     async getWorkspaces(request, response) {
@@ -11,7 +12,7 @@ class WorkspaceController {
             const workspaces = await workspaceMemberRepository.getWorkspaceListByUserId(user.id)
             response.json(
                 {
-                    ok: true, 
+                    ok: true,
                     status: 200,
                     message: 'Espacios de trabajo obtenidos',
                     data: {
@@ -34,6 +35,45 @@ class WorkspaceController {
             else {
                 console.error('Error inesperado en el registro', error)
                 return res.status(500).json(
+                    {
+                        ok: false,
+                        status: 500,
+                        message: "Internal server error"
+                    }
+                )
+            }
+        }
+    }
+
+    async create(request, response) {
+        try {
+            const { title, description } = request.body
+            const user = request.user
+            await workspaceService.create(
+                title,
+                description,
+                'test_1.png',
+                user.id
+            )
+
+            return response.status(201).json({
+                ok: true,
+                status: 201,
+                message: "Espacio de trabajo creado con exito"
+            })
+        } catch (error) {
+            if (error instanceof ServerError) {
+                return response.status(error.status).json(
+                    {
+                        ok: false,
+                        status: error.status,
+                        message: error.message
+                    }
+                )
+            }
+            else {
+                console.error('Error inesperado en el registro', error)
+                return response.status(500).json(
                     {
                         ok: false,
                         status: 500,
