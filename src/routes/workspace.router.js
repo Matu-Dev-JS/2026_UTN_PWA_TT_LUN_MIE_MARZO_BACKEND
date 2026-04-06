@@ -23,6 +23,7 @@ workspaceRouter.post(
 
 workspaceRouter.get(
     '/:workspace_id',
+    
     verifyMemberWorkspaceRoleMiddleware([]),
     workspaceController.getById
 )

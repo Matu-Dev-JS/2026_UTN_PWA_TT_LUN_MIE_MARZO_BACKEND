@@ -48,8 +48,8 @@ Response: {
 POST /api/workspace/:workspace_id/channel
 Middlewares: 
     - auth
-    - verifyMember (Configurar rol si se desea)
     - verifyWorkspaceMiddleware
+    - verifyMember (Configurar rol si se desea)
 body: {
     title,
     description
@@ -58,13 +58,13 @@ body: {
 GET /api/workspace/:workspace_id/channel
 Middlewares: 
     - auth
-    - verifyMember (Configurar rol si se desea)
     - verifyWorkspaceMiddleware
+    - verifyMember (Configurar rol si se desea)
 
 DELETE /api/workspace/:workspace_id/channel/:channel_id
 Middlewares: 
     - auth
-    - verifyMember (Configurar rol si se desea)
     - verifyWorkspaceMiddleware
+    - verifyMember (Configurar rol si se desea)
     - verifyChannelMiddleware
 
