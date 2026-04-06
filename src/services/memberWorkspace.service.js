@@ -18,7 +18,19 @@ class MemberWorkspaceService {
         await workspaceMemberRepository.create(workspace_id, user_id, role)
     }
 
+    async getMemberList(workspace_id) {
+        try {
+            if (!workspace_id) {
+                throw new ServerError("Todos los campos son obligatorios", 404)
+            }
 
+            return await workspaceMemberRepository.getMemberList(
+                workspace_id
+            )
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 const memberWorkspaceService = new MemberWorkspaceService()

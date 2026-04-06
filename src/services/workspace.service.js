@@ -15,6 +15,30 @@ class WorkspaceService {
         )
         return workspace_created
     }
+     async getOne(workspace_id) {
+        if (!workspace_id) {
+            throw new ServerError("Debe proporcionar un id", 400)
+        }
+
+        // Si la Id no es valida
+      /*   if (!isValidObjectId(workspace_id)) {
+            throw new ServerError("Id de espacio de trabajo invalida", 400)
+        }
+ */
+        try {
+            // Agregar la lista de miembros
+            const workspace = await workspaceRepository.getById(workspace_id)
+
+            // Si el espacio no existe
+            if (!workspace) {
+                throw new ServerError("El espacio de trabajo no existe", 404)
+            }
+
+            return workspace
+        } catch (error) {
+            throw error
+        }
+    }
 }
 const workspaceService = new WorkspaceService()
 export default workspaceService

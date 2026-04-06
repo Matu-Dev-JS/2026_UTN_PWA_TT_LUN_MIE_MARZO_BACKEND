@@ -1,5 +1,6 @@
 import ServerError from "../helpers/error.helper.js"
 import workspaceMemberRepository from "../repository/member.repository.js"
+import memberWorkspaceService from "../services/memberWorkspace.service.js"
 import workspaceService from "../services/workspace.service.js"
 
 class WorkspaceController {
@@ -74,6 +75,45 @@ class WorkspaceController {
             else {
                 console.error('Error inesperado en el registro', error)
                 return response.status(500).json(
+                    {
+                        ok: false,
+                        status: 500,
+                        message: "Internal server error"
+                    }
+                )
+            }
+        }
+    }
+
+     async getById(req, res) {
+        const { workspace_id } = req.params
+        try {
+            const workspace = await workspaceService.getOne(workspace_id)
+            const members = await memberWorkspaceService.getMemberList(workspace_id)
+            res.json(
+                {
+                    ok: true,
+                    status: 200,
+                    message: 'Espacio de trabajo obtenido',
+                    data: {
+                        workspace,
+                        members: members
+                    }
+                }
+            )
+        } catch (error) {
+            if (error instanceof ServerError) {
+                return res.status(error.status).json(
+                    {
+                        ok: false,
+                        status: error.status,
+                        message: error.message
+                    }
+                )
+            }
+            else {
+                console.error('Error inesperado en el registro', error)
+                return res.status(500).json(
                     {
                         ok: false,
                         status: 500,
