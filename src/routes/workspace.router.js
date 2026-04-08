@@ -8,6 +8,7 @@ import {Router} from 'express'
 import workspaceController from '../controllers/workspace.controller.js'
 import authMiddleware from '../middlewares/authMiddleware.js'
 import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verifyMemberWorkspaceMiddleware'
+import channelRouter from './channel.router.js'
 
 const workspaceRouter = Router()
 workspaceRouter.use(authMiddleware)
@@ -28,6 +29,11 @@ workspaceRouter.get(
     workspaceController.getById
 )
 
+
+workspaceRouter.use(
+    '/:workspace_id/channels', 
+    channelRouter
+)
 
 
 export default workspaceRouter
