@@ -1,5 +1,6 @@
-import channelRepository from "../repository/channel.repository.js"
+
 import ServerError from "../helpers/error.helper.js"
+import channelRepository from "../repository/channel.repository.js"
 
 
 class ChannelService {
@@ -34,7 +35,7 @@ class ChannelService {
         }
 
         
-        const channel = await channelRepository.softDelete(workspace_id, channel_id)
+        const channel = await channelRepository.softDelete(channel_id)
         return channel
     }
 
@@ -44,7 +45,7 @@ class ChannelService {
             throw new ServerError("Faltan campos obligatorios", 400)
         }
 
-        const channel = await channelRepository.delete(workspace_id, channel_id)
+        const channel = await channelRepository.delete( channel_id)
         return channel
     }
 }

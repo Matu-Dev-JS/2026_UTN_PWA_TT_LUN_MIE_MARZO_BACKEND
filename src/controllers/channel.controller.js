@@ -167,6 +167,7 @@ class ChannelController {
 
     async delete(req, res) {
         try {
+            console.log(req)
             const { workspace, channel } = req
             
             const channel_found = await channelService.delete(workspace._id, channel.channel_id)
