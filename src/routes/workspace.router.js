@@ -11,6 +11,12 @@ import verifyMemberWorkspaceRoleMiddleware from '../middlewares/verifyMemberWork
 import channelRouter from './channel.router.js'
 
 const workspaceRouter = Router()
+
+workspaceRouter.get(
+    '/:workspace_id/member',
+    workspaceController.respondToInvitation
+)
+
 workspaceRouter.use(authMiddleware)
 workspaceRouter.get(
     '/',
@@ -27,6 +33,12 @@ workspaceRouter.get(
     
     verifyMemberWorkspaceRoleMiddleware([]),
     workspaceController.getById
+)
+
+workspaceRouter.post(
+    '/:workspace_id/member/invite',
+    verifyMemberWorkspaceRoleMiddleware(['admin', 'owner']),
+    workspaceController.inviteMember
 )
 
 

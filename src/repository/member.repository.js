@@ -10,7 +10,7 @@ WorkspaceMemberRepository
 import WorkspaceMember from "../models/workspaceMember.model.js"
 class WorkspaceMemberRepository {
     async create(fk_id_workspace, fk_id_user, role) {
-        await WorkspaceMember.create({
+        return await WorkspaceMember.create({
             fk_id_workspace: fk_id_workspace,
             fk_id_user: fk_id_user,
             role: role
@@ -29,6 +29,14 @@ class WorkspaceMemberRepository {
             { new: true }
         )
         return new_workspace_member
+    }
+    async updateInvitationStatus(member_id, status) {
+        const updated_member = await WorkspaceMember.findByIdAndUpdate(
+            member_id,
+            { acceptInvitation: status },
+            { new: true }
+        )
+        return updated_member
     }
     async getAll() {
         await WorkspaceMember.find()
@@ -92,7 +100,7 @@ class WorkspaceMemberRepository {
     }
 
     async getByWorkspaceAndUserId(workspace_id, user_id) {
-        return await WorkspaceMember.find({ workspace_id, user_id })
+        return await WorkspaceMember.findOne({ fk_id_workspace: workspace_id, fk_id_user: user_id })
     }
 
     async isMemberPartOfWorkspaceById(user_id, workspace_id) {

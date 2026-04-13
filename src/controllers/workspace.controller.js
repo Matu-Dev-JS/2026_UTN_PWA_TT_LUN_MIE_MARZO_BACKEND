@@ -123,6 +123,61 @@ class WorkspaceController {
             }
         }
     }
+    async inviteMember(req, res) {
+        const { workspace_id } = req.params
+        const { email, role } = req.body
+        try {
+            await memberWorkspaceService.inviteMember(workspace_id, email, role)
+            res.status(201).json({
+                ok: true,
+                status: 201,
+                message: 'Invitación enviada con éxito'
+            })
+        } catch (error) {
+            if (error instanceof ServerError) {
+                return res.status(error.status).json({
+                    ok: false,
+                    status: error.status,
+                    message: error.message
+                })
+            } else {
+                console.error('Error al invitar miembro', error)
+                return res.status(500).json({
+                    ok: false,
+                    status: 500,
+                    message: "Internal server error"
+                })
+            }
+        }
+    }
+
+    async respondToInvitation(req, res) {
+        const { token } = req.query
+        try {
+            const result = await memberWorkspaceService.respondToInvitation(token)
+            res.status(200).json({
+                ok: true,
+                status: 200,
+                message: `Invitación ${result.acceptInvitation} con éxito`,
+                data: result
+            })
+        } catch (error) {
+            if (error instanceof ServerError) {
+                return res.status(error.status).json({
+                    ok: false,
+                    status: error.status,
+                    message: error.message
+                })
+            } else {
+                console.error('Error al responder invitación', error)
+                return res.status(500).json({
+                    ok: false,
+                    status: 500,
+                    message: "Internal server error"
+                })
+            }
+        }
+    }
 }
 
 const workspaceController = new WorkspaceController()

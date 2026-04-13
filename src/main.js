@@ -64,3 +64,14 @@ app.listen(
 //workspaceRepository.create('test', 'lorem', '', true)
 
 //workspaceMemberRepository.create('69c1a7a7f5505d11801c0778', '69b1d51bf91f9031fa4f2d04', 'owner')
+
+/* function verifyEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+} */
+
+function verifyPhoneNumber (tel){
+    //Valid: +23 11 2232-2323
+    const phoneRegex = /^\+?\d{1,3}?[- .]?\(?(?:\d{2,3})\)?[- .]?\d{1,4}[- .]?\d{4}$/
+    return phoneRegex.test(tel)
+}
