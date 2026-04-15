@@ -22,8 +22,54 @@ connectMongoDB()
 
 const app = express()
 
+/* 
+API es privada y los clientes son limitados y de confianza
+WHITE LIST DE DOMINIOS PERMITIDOS
+*/
+/* const allowedDomains = [
+    'http://localhost:5173', //Frontend local
+    'https://2026-utn-pwa-tt-mar-lun-mier-fronte.vercel.app'//Frontend desplegado
+]
+app.use(cors(
+    {
+        // origin direccion de quien consulta 
+        origin: (origin, callback) => {
+            //Si no hay origin, es una peticion local y estoy en modo desarrollo
+            if (!origin && ENVIRONMENT.MODE === 'dev') {
+                callback(null, true)
+            }
+            //Si el origin esta en la white list, permito la peticion
+            else if (allowedDomains.includes(origin)) {
+                callback(null, true)
+            } else {
+                callback(new ServerError('No autorizado', 403))
+            }
+        }
+    }
+)) */
 
-app.use(cors())
+/* 
+API es publica y los clientes son ilimitados
+BLACK LIST DE DOMINIOS PROHEBIDOS
+*/
+const blockedOrgins = [
+    'http://localhost:5173' //Front esta bloqueado
+]
+app.use(
+    cors(
+        {
+            origin: (origin, callback) => {
+                if (blockedOrgins.includes(origin)) {
+                    callback(new ServerError('No autorizado', 403))
+                } else {
+                    callback(null, true)
+                }
+            }
+        }
+    )
+)
+
+//app.use(cors())
 
 app.use(express.json())
 
@@ -36,17 +82,17 @@ app.use('/api/auth', authRouter)
 app.use('/api/workspace', workspaceRouter)
 
 app.get(
-    '/api/test', 
-    authMiddleware, 
+    '/api/test',
+    authMiddleware,
     (request, response, next) => {
-        try{
-            const {user} = request
-            if(true){
+        try {
+            const { user } = request
+            if (true) {
                 throw new ServerError('Error interno X', 400)
             }
             response.send('ok, vos sos: ' + user.id)
         }
-        catch(error){
+        catch (error) {
             next(error)
         }
     }
@@ -59,7 +105,7 @@ app.use(
 )
 
 app.listen(
-    ENVIRONMENT.PORT, 
+    ENVIRONMENT.PORT,
     () => {
         console.log('La aplicacion se esta escuchando en el puerto ' + ENVIRONMENT.PORT)
     }
