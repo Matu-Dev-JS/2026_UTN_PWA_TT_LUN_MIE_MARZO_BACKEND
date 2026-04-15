@@ -13,6 +13,8 @@ import mailerTransporter from "./config/mailer.config.js"
 import cors from 'cors'
 import authMiddleware from "./middlewares/authMiddleware.js"
 import workspaceRouter from "./routes/workspace.router.js"
+import errorHandlerMiddleware from "./middlewares/errorHandler.middleware.js"
+import ServerError from "./helpers/error.helper.js"
 
 
 connectMongoDB()
@@ -36,10 +38,24 @@ app.use('/api/workspace', workspaceRouter)
 app.get(
     '/api/test', 
     authMiddleware, 
-    (request, response) => {
-        const {user} = request
-        response.send('ok, vos sos: ' + user.id)
+    (request, response, next) => {
+        try{
+            const {user} = request
+            if(true){
+                throw new ServerError('Error interno X', 400)
+            }
+            response.send('ok, vos sos: ' + user.id)
+        }
+        catch(error){
+            next(error)
+        }
     }
+)
+
+//Siempre debe ir al final de todos los endpoints, rutas o middlewares
+//Para poder dar uso correcto, nuestros controladores ahora seran "middlewares"
+app.use(
+    errorHandlerMiddleware
 )
 
 app.listen(
@@ -49,29 +65,3 @@ app.listen(
     }
 )
 
-
-/* mailerTransporter.sendMail(
-    {
-        from: ENVIRONMENT.MAIL_USER,
-        to: ENVIRONMENT.MAIL_USER, //Aca va a donde quieren enviar
-        subject: 'Test de envio de email',
-        html: '<h1>Si recibis este email, el sistema de envio de emails funciona correctamente</h1>'
-    }
-)
- */
-
-
-//workspaceRepository.create('test', 'lorem', '', true)
-
-//workspaceMemberRepository.create('69c1a7a7f5505d11801c0778', '69b1d51bf91f9031fa4f2d04', 'owner')
-
-/* function verifyEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return emailRegex.test(email)
-} */
-
-function verifyPhoneNumber (tel){
-    //Valid: +23 11 2232-2323
-    const phoneRegex = /^\+?\d{1,3}?[- .]?\(?(?:\d{2,3})\)?[- .]?\d{1,4}[- .]?\d{4}$/
-    return phoneRegex.test(tel)
-}

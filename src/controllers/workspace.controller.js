@@ -1,10 +1,9 @@
-import ServerError from "../helpers/error.helper.js"
 import workspaceMemberRepository from "../repository/member.repository.js"
 import memberWorkspaceService from "../services/memberWorkspace.service.js"
 import workspaceService from "../services/workspace.service.js"
 
 class WorkspaceController {
-    async getWorkspaces(request, response) {
+    async getWorkspaces(request, response, next) {
         try {
             //Cliente consultante
             const user = request.user
@@ -23,30 +22,11 @@ class WorkspaceController {
             )
         }
         catch (error) {
-            //Errores esperables en el sistema
-            if (error instanceof ServerError) {
-                return res.status(error.status).json(
-                    {
-                        ok: false,
-                        status: error.status,
-                        message: error.message
-                    }
-                )
-            }
-            else {
-                console.error('Error inesperado en el registro', error)
-                return res.status(500).json(
-                    {
-                        ok: false,
-                        status: 500,
-                        message: "Internal server error"
-                    }
-                )
-            }
+            next(error)
         }
     }
 
-    async create(request, response) {
+    async create(request, response, next) {
         try {
             const { title, description } = request.body
             const user = request.user
@@ -63,29 +43,11 @@ class WorkspaceController {
                 message: "Espacio de trabajo creado con exito"
             })
         } catch (error) {
-            if (error instanceof ServerError) {
-                return response.status(error.status).json(
-                    {
-                        ok: false,
-                        status: error.status,
-                        message: error.message
-                    }
-                )
-            }
-            else {
-                console.error('Error inesperado en el registro', error)
-                return response.status(500).json(
-                    {
-                        ok: false,
-                        status: 500,
-                        message: "Internal server error"
-                    }
-                )
-            }
+            next(error)
         }
     }
 
-     async getById(req, res) {
+      async getById(req, res, next) {
         const { workspace_id } = req.params
         try {
             const workspace = await workspaceService.getOne(workspace_id)
@@ -102,28 +64,10 @@ class WorkspaceController {
                 }
             )
         } catch (error) {
-            if (error instanceof ServerError) {
-                return res.status(error.status).json(
-                    {
-                        ok: false,
-                        status: error.status,
-                        message: error.message
-                    }
-                )
-            }
-            else {
-                console.error('Error inesperado en el registro', error)
-                return res.status(500).json(
-                    {
-                        ok: false,
-                        status: 500,
-                        message: "Internal server error"
-                    }
-                )
-            }
+            next(error)
         }
     }
-    async inviteMember(req, res) {
+    async inviteMember(req, res, next) {
         const { workspace_id } = req.params
         const { email, role } = req.body
         try {
@@ -134,24 +78,11 @@ class WorkspaceController {
                 message: 'Invitación enviada con éxito'
             })
         } catch (error) {
-            if (error instanceof ServerError) {
-                return res.status(error.status).json({
-                    ok: false,
-                    status: error.status,
-                    message: error.message
-                })
-            } else {
-                console.error('Error al invitar miembro', error)
-                return res.status(500).json({
-                    ok: false,
-                    status: 500,
-                    message: "Internal server error"
-                })
-            }
+            next(error)
         }
     }
 
-    async respondToInvitation(req, res) {
+    async respondToInvitation(req, res, next) {
         const { token } = req.query
         try {
             const result = await memberWorkspaceService.respondToInvitation(token)
@@ -162,20 +93,7 @@ class WorkspaceController {
                 data: result
             })
         } catch (error) {
-            if (error instanceof ServerError) {
-                return res.status(error.status).json({
-                    ok: false,
-                    status: error.status,
-                    message: error.message
-                })
-            } else {
-                console.error('Error al responder invitación', error)
-                return res.status(500).json({
-                    ok: false,
-                    status: 500,
-                    message: "Internal server error"
-                })
-            }
+            next(error)
         }
     }
 }

@@ -1,16 +1,13 @@
-import ServerError from "../helpers/error.helper.js"
 import channelService from "../services/channel.service.js"
 
-
-
 class ChannelController {
-    async create(req, res) {
+    async create(req, res, next) {
         try {
             const workspace = req.workspace
             const { name, description } = req.body
 
             const channel = await channelService.create(workspace._id, name, description)
-            
+
             res.status(201).json(
                 {
                     ok: true,
@@ -22,34 +19,15 @@ class ChannelController {
                 }
             )
         } catch (error) {
-            //Errores esperables en el sistema
-            if (error instanceof ServerError) {
-                return res.status(error.status).json(
-                    {
-                        ok: false,
-                        status: error.status,
-                        message: error.message
-                    }
-                )
-            }
-            else {
-                console.error('Error inesperado en el registro', error)
-                return res.status(500).json(
-                    {
-                        ok: false,
-                        status: 500,
-                        message: "Internal server error"
-                    }
-                )
-            }
+            next(error)
         }
-    }   
+    }
 
-    async getAll(req, res) {
+    async getAll(req, res, next) {
         try {
             const workspace = req.workspace
             const channels = await channelService.getAll(workspace._id)
-            
+
             res.status(200).json(
                 {
                     ok: true,
@@ -61,36 +39,15 @@ class ChannelController {
                 }
             )
         } catch (error) {
-            //Errores esperables en el sistema
-            if (error instanceof ServerError) {
-                return res.status(error.status).json(
-                    {
-                        ok: false,
-                        status: error.status,
-                        message: error.message
-                    }
-                )
-            }
-            else {
-                console.error('Error inesperado en el registro', error)
-                return res.status(500).json(
-                    {
-                        ok: false,
-                        status: 500,
-                        message: "Internal server error"
-                    }
-                )
-            }
+            next(error)
         }
     }
 
-    async getById(req, res) {
+    async getById(req, res, next) {
         try {
             const { workspace, channel } = req
-            console.log(workspace)
-            // TODO: cambiar la forma en la que se obtiene el canal a req.channel (después de crear el middleware)
             const channel_found = await channelService.getById(workspace._id, channel.channel_id)
-            
+
             res.status(200).json(
                 {
                     ok: true,
@@ -102,35 +59,16 @@ class ChannelController {
                 }
             )
         } catch (error) {
-            //Errores esperables en el sistema
-            if (error instanceof ServerError) {
-                return res.status(error.status).json(
-                    {
-                        ok: false,
-                        status: error.status,
-                        message: error.message
-                    }
-                )
-            }
-            else {
-                console.error('Error inesperado en el registro', error)
-                return res.status(500).json(
-                    {
-                        ok: false,
-                        status: 500,
-                        message: "Internal server error"
-                    }
-                )
-            }
+            next(error)
         }
     }
 
-    async softDelete(req, res) {
+    async softDelete(req, res, next) {
         try {
             const { workspace, channel } = req
-            
+
             const channel_found = await channelService.softDelete(workspace._id, channel.channel_id)
-            
+
             res.status(200).json(
                 {
                     ok: true,
@@ -142,36 +80,16 @@ class ChannelController {
                 }
             )
         } catch (error) {
-            //Errores esperables en el sistema
-            if (error instanceof ServerError) {
-                return res.status(error.status).json(
-                    {
-                        ok: false,
-                        status: error.status,
-                        message: error.message
-                    }
-                )
-            }
-            else {
-                console.error('Error inesperado en el registro', error)
-                return res.status(500).json(
-                    {
-                        ok: false,
-                        status: 500,
-                        message: "Internal server error"
-                    }
-                )
-            }
+            next(error)
         }
     }
 
-    async delete(req, res) {
+    async delete(req, res, next) {
         try {
-            console.log(req)
             const { workspace, channel } = req
-            
+
             const channel_found = await channelService.delete(workspace._id, channel.channel_id)
-            
+
             res.status(200).json(
                 {
                     ok: true,
@@ -183,26 +101,7 @@ class ChannelController {
                 }
             )
         } catch (error) {
-            //Errores esperables en el sistema
-            if (error instanceof ServerError) {
-                return res.status(error.status).json(
-                    {
-                        ok: false,
-                        status: error.status,
-                        message: error.message
-                    }
-                )
-            }
-            else {
-                console.error('Error inesperado en el registro', error)
-                return res.status(500).json(
-                    {
-                        ok: false,
-                        status: 500,
-                        message: "Internal server error"
-                    }
-                )
-            }
+            next(error)
         }
     }
 }
