@@ -9,7 +9,11 @@ const ENVIRONMENT = {
     MAIL_PASSWORD: process.env.MAIL_PASSWORD,
     URL_BACKEND: process.env.URL_BACKEND,
     JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
-    MODE: process.env.MODE
+    MODE: process.env.MODE,
+    URL_FRONTEND: process.env.URL_FRONTEND,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+    CLODINARY_CLOUD_NAME: process.env.CLODINARY_CLOUD_NAME
 }
 
 export default ENVIRONMENT

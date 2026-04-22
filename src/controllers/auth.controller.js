@@ -1,3 +1,4 @@
+import ENVIRONMENT from "../config/environment.config.js";
 import userRepository from "../repository/user.repository.js";
 import authService from "../services/auth.service.js";
 
@@ -46,7 +47,8 @@ class AuthController {
 
             await authService.verifyEmail({ verify_email_token })
 
-            response.status(200).send(`<h1>Mail verificado exitosamente</h1>`)
+            //response.status(200).send(`<h1>Mail verificado exitosamente</h1>`)
+            response.status(200).redirect(ENVIRONMENT.URL_FRONTEND + '/login?from=verify_email')
         }
         catch (error) {
             next(error)
