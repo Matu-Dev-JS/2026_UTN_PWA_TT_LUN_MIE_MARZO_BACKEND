@@ -15,6 +15,8 @@ import authMiddleware from "./middlewares/authMiddleware.js"
 import workspaceRouter from "./routes/workspace.router.js"
 import errorHandlerMiddleware from "./middlewares/errorHandler.middleware.js"
 import ServerError from "./helpers/error.helper.js"
+import fileRouter from "./routes/file.router.js"
+import multer from "multer"
 
 
 connectMongoDB()
@@ -52,7 +54,7 @@ app.use(cors(
 API es publica y los clientes son ilimitados
 BLACK LIST DE DOMINIOS PROHEBIDOS
 */
-const blockedOrgins = [
+/* const blockedOrgins = [
     'http://localhost:5173' //Front esta bloqueado
 ]
 app.use(
@@ -68,10 +70,11 @@ app.use(
         }
     )
 )
-
-//app.use(cors())
+ */
+app.use(cors())
 
 app.use(express.json())
+
 
 
 /* 
@@ -80,6 +83,11 @@ Delegamos las consultas que vengan sobre '/api/health' al healthRouter
 app.use('/api/health', healthRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/workspace', workspaceRouter)
+
+app.use(
+    '/api/file',
+    fileRouter
+)
 
 app.get(
     '/api/test',
